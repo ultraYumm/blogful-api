@@ -78,11 +78,17 @@ articlesRouter
            req.app.get('db'),
            req.params.article_id
          )
-           .then(() => {
-             res.status(204).end()
-           })
-           .catch(next)
-  })
+         .then(article => {
+          if (!article) {
+            return res.status(404).json({
+              error: { message: `Article doesn't exist` }
+            })
+          }
+          res.status(204).end()
+        })
+        .catch(next)
+  
+      })
   
 .patch(jsonParser, (req, res, next) => {
        const { title, content, style } = req.body
